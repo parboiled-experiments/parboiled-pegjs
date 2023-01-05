@@ -26,6 +26,9 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 		HIDE_LABELS.add("WhiteSpace");
 		HIDE_LABELS.add("LineTerminatorSequence");
 		HIDE_LABELS.add("Comment");
+		HIDE_LABELS.add("EOS");
+		HIDE_LABELS.add("Initializer");
+		HIDE_LABELS.add("CodeBlock");
 
 		HIDE_LABELS.add("Rule");
 		HIDE_LABELS.add("ChoiceExpression");
@@ -38,6 +41,7 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 		HIDE_LABELS.add("PrimaryExpression");
 		HIDE_LABELS.add("LiteralMatcher");
 		HIDE_LABELS.add("CharacterClassMatcher");
+		HIDE_LABELS.add("AnyMatcher");
 		HIDE_LABELS.add("RuleReferenceExpression");
 	}
 
@@ -57,7 +61,7 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 	@DontLabel
 	@SuppressWarnings({ "rawtypes" })
 	protected Rule parseRule(ParsingResult<?> result, Node<?> parent) {
-		Rule rule = ANY;
+		Rule rule = null;
 		level++;
 
 		if (!HIDE_LABELS.contains(parent.getLabel()) && !parent.getLabel().startsWith("'")) {
@@ -185,7 +189,10 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 			} else {
 				rule = AnyOf(chars.toString()).skipNode();
 			}
+		}
 
+		else if ("AnyMatcher".equals(parent.getLabel())) {
+			rule = ANY;
 		}
 
 		else if ("RuleReferenceExpression".equals(parent.getLabel())) {
@@ -278,7 +285,7 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 		List<Rule> childRules = new LinkedList<>();
 		for (Object sub : children) {
 			Rule childRule = parseRule(result, (Node<?>) sub);
-			if (childRule != ANY) {
+			if (childRule != null) {
 				childRules.add(childRule);
 			}
 		}
