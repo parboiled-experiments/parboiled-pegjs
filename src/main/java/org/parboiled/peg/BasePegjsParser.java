@@ -1,6 +1,5 @@
 package org.parboiled.peg;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,9 +8,8 @@ import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.json.BaseJsonParser;
-import org.parboiled.matchers.ProxyMatcher;
 import org.parboiled.support.ParsingResult;
-import org.parboiled.peg.util.ParseUtils;
+import org.parboiled.util.ParseUtils;
 
 @BuildParseTree
 public abstract class BasePegjsParser extends BaseJsonParser {
@@ -52,6 +50,7 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 		return startRule;
 	}
 	
+	@DontLabel
 	protected Rule activateRule(String label, Rule rule) {
 		return rule;
 	}
@@ -223,18 +222,6 @@ public abstract class BasePegjsParser extends BaseJsonParser {
 		level--;
 		return rule;
 
-	}
-
-	@DontLabel
-	protected Rule createProxy(java.lang.String proxyName) {
-	    ProxyMatcher proxy = new ProxyMatcher();
-	    List<ProxyMatcher> proxies = PROXY_CACHE.get(proxyName);
-	    if (proxies == null) {
-	        proxies = new ArrayList<>();
-	        PROXY_CACHE.put(proxyName, proxies);
-	    }
-	    proxies.add(proxy);
-	    return proxy;
 	}
 
 	@DontLabel

@@ -13,7 +13,7 @@ import org.parboiled.annotations.DontLabel;
 import org.parboiled.json.PegParser;
 import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
-import org.parboiled.peg.util.ParseUtils;
+import org.parboiled.util.ParseUtils;
 
 @BuildParseTree
 public class PegPegjsParser extends PegParser {
